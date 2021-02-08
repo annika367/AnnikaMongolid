@@ -5,26 +5,46 @@
     <button @click="addCount()">+</button>
     <button @click="removeCount()">-</button> -->
 
-    <b-table striped hover :items="items" :fields="fields"></b-table>
+    <!-- Tellimuse tabel -->
+    <b-table striped hover :items="items" :fields="fields">
+      <template #cell(price)="data">
+        <b class="text-info">{{ data.value }} EUR </b>
+      </template>
+
+      <template #cell(actions)="data">
+        <b-button variant="success" @click="showProducts(data.item.products)">Vaata tooteid</b-button>
+        <!-- <b class="text-info">{{ data.item.products }} EUR </b> -->
+      </template>
+
+    </b-table>  
+    
+    <!-- Toodete tabel -->
+    <b-table striped hover :items="productItems" :fields="productFields">
+      
+      
+    </b-table>  
+
+    <!-- <b-table striped hover :items="items" :fields="fields">
+      <template #cell(client)="data">
+        <b class="text-info">{{ data.value.lastName.toUpperCase() }}</b>, <b>{{ data.value.firstName }}</b>
+      </template>
+    </b-table> -->
     
   </div>
 </template>
 
 <script>
 import axios from 'axios'
-
 export default {
   name: 'Orders',
   data() {
     return {
       count: 0,
-      fields: ['first_name', 'last_name', 'age'],
-      items: [
-          { age: 40, first_name: 'Dickerson', last_name: 'Macdonald' },
-          { age: 21, first_name: 'Larsen', last_name: 'Shaw' },
-          { age: 89, first_name: 'Geneva', last_name: 'Wilson' },
-          { age: 38, first_name: 'Jami', last_name: 'Carney' }
-        ]
+      fields: ['client', 'orderDate', 'status', { key: 'price', label: 'Hind!'}, 'action'],
+      items: [],
+      productsFields: [],
+      productItems: []
+        
     }
   },
   async created () {
@@ -34,10 +54,12 @@ export default {
       headers: {}
     })
     console.log('orders', orders)
-
     this.item = orders.data
   },
   methods: {
+    showProducts (prodcts) {
+
+    },
     addCount () {
       console.log('Praegune count:', this.count)
       this.count++
