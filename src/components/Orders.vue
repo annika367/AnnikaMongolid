@@ -5,7 +5,7 @@
     <button @click="addCount()">+</button>
     <button @click="removeCount()">-</button> -->
 
-    <!-- Tellimuse tabel -->
+    <!-- Tellimuste tabel -->
     <b-table striped hover :items="items" :fields="fields">
       <template #cell(price)="data">
         <b class="text-info">{{ data.value }} EUR </b>
@@ -35,12 +35,14 @@
 
 <script>
 import axios from 'axios'
+
 export default {
   name: 'Orders',
   data() {
     return {
       count: 0,
-      fields: ['client', 'orderDate', 'status', { key: 'price', label: 'Hind!'}, 'action'],
+      fields: ['orderID', 'toWhom', 'toCity'],
+      // fields: ['client' 'orderDate', 'status', { key: 'price', label: 'Hind!'}, 'action'],
       items: [],
       productsFields: [],
       productItems: []
@@ -54,7 +56,7 @@ export default {
       headers: {}
     })
     console.log('orders', orders)
-    this.item = orders.data
+    this.item = orders.data.allOrders
   },
   methods: {
     showProducts (prodcts) {
