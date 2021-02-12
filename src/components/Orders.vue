@@ -7,21 +7,21 @@
 
     <!-- Tellimuste tabel -->
     <b-table striped hover :items="items" :fields="fields">
+     
       <template #cell(price)="data">
         <b class="text-info">{{ data.value }} EUR </b>
       </template>
 
       <template #cell(actions)="data">
-        <b-button variant="success" @click="showProducts(data.item.products)">Vaata tooteid</b-button>
+        <b-button v-b-modal.modal-1 variant="success" @click="showProducts(data.item.products, data.item)">Vaata tooteid</b-button>
         <!-- <b class="text-info">{{ data.item.products }} EUR </b> -->
       </template>
 
     </b-table>  
     
     <!-- Toodete tabel -->
+    
     <b-table striped hover :items="productItems" :fields="productFields">
-      
-      
     </b-table>  
 
     <!-- <b-table striped hover :items="items" :fields="fields">
@@ -30,6 +30,18 @@
       </template>
     </b-table> -->
     
+    <!-- <b-button v-b-modal.modal-1>Launch demo modal</b-button> -->
+
+    <b-modal id="modal-1" :title="productTableTitle" size="xl">
+      <b-table striped hover :items="productItems" :fields="productFields">
+        
+        <template #cell(price)="data">
+          <b class="text-info">{{ data.value }} EUR </b>
+        </template>
+
+      </b-table> 
+    </b-modal>
+  
   </div>
 </template>
 
@@ -41,12 +53,12 @@ export default {
   data() {
     return {
       count: 0,
-      fields: ['orderID', 'toWhom', 'toCity'],
+      fields: ['orderID', 'toWhom', 'toCity'], // kuvab need mida tahan, kui jätan tühjaks, siis kuvab kõik
       // fields: ['client' 'orderDate', 'status', { key: 'price', label: 'Hind!'}, 'action'],
       items: [],
-      productsFields: [],
-      productItems: []
-        
+      productFields: [], // siia panna pealkirjad, mida tahan kuvada
+      productItems: [],
+      productTableTitle: 'Pealkiri'     
     }
   },
   async created () {
@@ -59,9 +71,12 @@ export default {
     this.item = orders.data.allOrders
   },
   methods: {
-    showProducts (prodcts) {
-
-    },
+  showProducts (products, item) {
+    console.log('products', products)
+    this.productItems = products
+    console.log(item)
+    this.productTableTitle = item.orderID
+  },
     addCount () {
       console.log('Praegune count:', this.count)
       this.count++
